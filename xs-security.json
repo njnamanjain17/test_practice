@@ -1,0 +1,42 @@
+{
+    "xsappname": "CIO_BTP",
+    "tenant-mode": "dedicated",
+    "description": "Security profile of called application",
+    "scopes": [
+        {
+            "name": "uaa.user",
+            "description": "UAA"
+        },
+        {
+            "name": "$XSAPPNAME.CIO_BTP-scope",
+            "granted-apps": [
+                "$XSAPPNAME(application,approvedeductions)"
+            ]
+        }
+    ],
+    "role-templates": [
+        {
+            "name": "Token_Exchange",
+            "description": "UAA",
+            "scope-references": [
+                "uaa.user"
+            ]
+        },
+        {
+            "name": "Access_to_CIO_BTP_srv",
+            "description": "Access to CIO_BTP_srv",
+            "scope-references": [
+                "$XSAPPNAME.CIO_BTP-scope"
+            ]
+        }
+    ],
+    "role-collections": [
+        {
+            "name": "CIORole-dev",
+            "description": "Role collection for app",
+            "role-template-references": [
+                "$XSAPPNAME.Access_to_CIO_BTP_srv"
+            ]
+        }
+    ]
+}

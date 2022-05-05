@@ -7,17 +7,24 @@
   "private": true,
   "dependencies": {
     "@sap/cds": "^5",
+    "@sap/cds-odata-v2-adapter-proxy": "^1.7.6",
     "@sap/hana-client": "^2.10.20",
-    "datetime-js": "^4.0.0",
+    "@sap/xsenv": "^3.1.1",
+    "@sap/xssec": "^3.2.11",
     "express": "^4",
-    "hdb": "^0.18.3"
+    "hdb": "^0.18.3",
+    "node-datetime": "2.1.2",
+    "passport": "^0.5.1",
+    "winston": "^3.3.3"
   },
   "devDependencies": {
     "@sap/hdi-deploy": "4.2.3",
+    "@sap/ux-specification": "^1.90.15",
     "sqlite3": "^5.0.2"
   },
   "scripts": {
-    "start": "cds run"
+    "start": "cds run",
+    "undeploy": "cf undeploy CIO_BTP --delete-services --delete-service-keys"
   },
   "eslintConfig": {
     "extends": "eslint:recommended",
@@ -48,6 +55,14 @@
     "requires": {
       "db": {
         "kind": "hana"
+      },
+      "uaa": {
+        "kind": "xsuaa"
+      },
+      "auth": {
+        "[production]": {
+          "strategy": "JWT"
+        }
       }
     },
     "hana": {

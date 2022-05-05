@@ -1,60 +1,106 @@
-## Generated mta.yaml based on template version 0.4.0
-## appName = CIO_BTP
-## language=nodejs; multitenant=false
-## approuter=
-_schema-version: '3.1'
+_schema-version: "3.1"
 ID: CIO_BTP
+description: A simple CAP project.
 version: 1.0.0
-description: "A simple CAP project."
+modules:
+- name: CIO_BTP-srv
+  type: nodejs
+  path: gen/srv
+  requires:
+  - name: CIO_BTP_APP-db
+  - name: uaa_CIO_BTP
+  provides:
+  - name: srv-api
+    properties:
+      srv-url: ${default-url}
+  parameters:
+    buildpack: nodejs_buildpack
+- name: CIO_BTP-db-deployer
+  type: hdb
+  path: gen/db
+  requires:
+  - name: CIO_BTP_APP-db
+  parameters:
+    buildpack: nodejs_buildpack
+- name: CIO_BTP-destination-content
+  type: com.sap.application.content
+  requires:
+  - name: CIO_BTP-destination-service
+    parameters:
+      content-target: true
+  - name: CIO_BTP_html_repo_host
+    parameters:
+      service-key:
+        name: CIO_BTP_html_repo_host-key
+  - name: uaa_CIO_BTP
+    parameters:
+      service-key:
+        name: uaa_CIO_BTP-key
+  parameters:
+    content:
+      instance:
+        destinations:
+        - Name: empdeduction_CIO_BTP_html_repo_host
+          ServiceInstanceName: CIO_BTP-html5-app-host-service
+          ServiceKeyName: CIO_BTP_html_repo_host-key
+          sap.cloud.service: empdeduction
+        - Authentication: OAuth2UserTokenExchange
+          Name: empdeduction_uaa_CIO_BTP
+          ServiceInstanceName: CIO_BTP-xsuaa-service
+          ServiceKeyName: uaa_CIO_BTP-key
+          sap.cloud.service: empdeduction
+        existing_destinations_policy: update
+  build-parameters:
+    no-source: true
+resources:
+- name: CIO_BTP_APP-db
+  type: com.sap.xs.hdi-container
+  parameters:
+    service: hana
+    service-plan: hdi-shared
+  properties:
+    hdi-service-name: ${service-name}
+- name: CIO_BTP-destination-service
+  type: org.cloudfoundry.managed-service
+  requires:
+      - name: srv-api
+  parameters:
+    config:
+      HTML5Runtime_enabled: true
+      init_data:
+        instance:
+          destinations:
+          - Authentication: NoAuthentication
+            HTML5.DynamicDestination: true
+            HTML5.ForwardAuthToken: true
+            Name: CIO_BTP-srv-api
+            ProxyType: Internet
+            Type: HTTP
+            URL: '~{srv-api/srv-url}'
+          existing_destinations_policy: update
+      version: 1.0.0
+    service: destination
+    service-name: CIO_BTP-destination-service
+    service-plan: lite
+- name: CIO_BTP_html_repo_host
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-name: CIO_BTP-html5-app-host-service
+    service-plan: app-host
+- name: uaa_CIO_BTP
+  type: org.cloudfoundry.managed-service
+  parameters:
+    path: ./xs-security.json
+    service: xsuaa
+    service-name: CIO_BTP-xsuaa-service
+    service-plan: application
 parameters:
+  deploy_mode: html5-repo
   enable-parallel-deployments: true
-   
 build-parameters:
   before-all:
-   - builder: custom
-     commands:
-      - npm install --production
-      - npx -p @sap/cds-dk cds build --production
-
-modules:
- # --------------------- SERVER MODULE ------------------------
- - name: CIO_BTP-srv
- # ------------------------------------------------------------
-   type: nodejs
-   path: gen/srv
-   parameters:
-     buildpack: nodejs_buildpack
-   requires:
-    # Resources extracted from CAP configuration
-    - name: CIO_BTP-db
-   provides:
-    - name: srv-api      # required by consumers of CAP services (e.g. approuter)
-      properties:
-        srv-url: ${default-url}
-
- # -------------------- SIDECAR MODULE ------------------------
- - name: CIO_BTP-db-deployer
- # ------------------------------------------------------------
-   type: hdb
-   path: gen/db  
-   parameters:
-     buildpack: nodejs_buildpack
-   requires:
-    # 'hana' and 'xsuaa' resources extracted from CAP configuration
-    - name: CIO_BTP-db
-
-
-resources:
- # services extracted from CAP configuration
- # 'service-plan' can be configured via 'cds.requires.<name>.vcap.plan'
-# ------------------------------------------------------------
- - name: CIO_BTP-db
-# ------------------------------------------------------------
-   type: com.sap.xs.hdi-container
-   parameters:
-     service: hana  # or 'hanatrial' on trial landscapes
-     service-plan: hdi-shared
-   properties:
-     hdi-service-name: ${service-name}
-
-
+  - builder: custom
+    commands:
+    - npm install --production
+    - npx -p @sap/cds-dk cds build --production

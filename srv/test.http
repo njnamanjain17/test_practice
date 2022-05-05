@@ -1,0 +1,87 @@
+GET http://localhost:4004/catalog/retriveUploadID(uploadID='1369')
+Content-Type: application/json;odata.metadata=minimal
+
+#######
+
+
+POST http://localhost:4004/catalog/sendDataToUpload
+Content-Type: application/json;odata.metadata=minimal
+
+{
+"uploadedBy": "naman.s.jain@accenture.com",
+"deductionsUploadType": "Car Rental",
+"comments":"Inserted",
+"payload":[
+ {
+   "Personnel_Number": 36089475,
+   "Wage_Type": 4416,
+   "Wagetype_Description": "Referral Bonus",
+   "Amount": "5500",
+   "Currency": "PHP",
+   "WBS": "AJHUD061"
+ },
+ {
+   "Personnel_Number": 84894597,
+   "Wage_Type": 3216,
+   "Wagetype_Description": "Referral Bonus",
+   "Amount": "2500",
+   "Currency": "PHP",
+   "WBS": "AJHUD262"
+ }
+]
+    }
+############
+
+
+POST http://localhost:4004/catalog/postDeducations
+Content-Type: application/json;odata.metadata=minimal
+
+{
+    "uploadID":1592,
+    "status": "Rejected at Level 1",
+    "comments": "Rejected by level 1",
+    "userId":"naman.s.jain@accenture.com"
+}
+
+################
+
+POST http://localhost:4004/catalog/updateDeduction
+Content-Type: application/json;odata.metadata=minimal
+
+{
+"uploadedBy": "naman.s.jain@accenture.com",
+"comments":"Testing for update",
+"uploadID":"1592",
+"payload":[
+ {
+   "Personnel_Number": 36089477,
+   "Wage_Type": 3415,
+   "Wagetype_Description": "Referral Bonus",
+   "Amount": "1810",
+   "Currency": "PHP",
+   "WBS": "AJHUD070"
+ },
+ {
+   "Personnel_Number": 84894577,
+   "Wage_Type": 2215,
+   "Wagetype_Description": "Referral Bonus",
+   "Amount": "3200",
+   "Currency": "PHP",
+   "WBS": "AJHUD275"
+ }
+]
+    }
+################
+
+POST http://localhost:4004/catalog/Ytest
+Content-Type: application/json;odata.metadata=minimal
+
+##################
+
+GET http://localhost:4004/catalog/Selecttest()
+Content-Type: application/json;odata.metadata=minimal
+
+###################
+
+POST http://localhost:4004/catalog/Deletedtest
+Content-Type: application/json;odata.metadata=minimal

@@ -6,4 +6,4 @@ applications:
     buildpacks:
       - nodejs_buildpack
     services:
-      - CIO_BTP-db
+      - CIO_BTP_APP-db

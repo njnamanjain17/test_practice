@@ -5,7 +5,6 @@
       "kind": "entity",
       "elements": {
         "personnelNumber": {
-          "key": true,
           "type": "cds.Integer"
         },
         "wageType": {
@@ -44,7 +43,7 @@
       "elements": {
         "uploadID": {
           "key": true,
-          "type": "cds.UUID"
+          "type": "cds.Integer"
         },
         "status": {
           "type": "cds.String",
@@ -56,6 +55,10 @@
         "uploadedBy": {
           "type": "cds.String",
           "length": 40
+        },
+        "deductionsUploadType": {
+          "type": "cds.String",
+          "length": 100
         },
         "deductionsUpload": {
           "type": "cds.Association",
@@ -80,6 +83,38 @@
         }
       }
     },
+    "app.deductions.Approver_Comments": {
+      "kind": "entity",
+      "elements": {
+        "uploadID": {
+          "type": "cds.Integer"
+        },
+        "commentDate": {
+          "type": "cds.DateTime"
+        },
+        "userID": {
+          "type": "cds.String",
+          "length": 40
+        },
+        "comments": {
+          "type": "cds.String",
+          "length": 5000
+        }
+      }
+    },
+    "app.deductions.Yamaha": {
+      "kind": "entity",
+      "elements": {
+        "BTPID": {
+          "key": true,
+          "type": "cds.String",
+          "length": 2000
+        },
+        "BusinessID": {
+          "type": "cds.Integer"
+        }
+      }
+    },
     "CatalogService": {
       "@source": "srv/service.cds",
       "kind": "service"
@@ -95,7 +130,6 @@
       },
       "elements": {
         "personnelNumber": {
-          "key": true,
           "type": "cds.Integer"
         },
         "wageType": {
@@ -141,7 +175,7 @@
       "elements": {
         "uploadID": {
           "key": true,
-          "type": "cds.UUID"
+          "type": "cds.Integer"
         },
         "status": {
           "type": "cds.String",
@@ -153,6 +187,10 @@
         "uploadedBy": {
           "type": "cds.String",
           "length": 40
+        },
+        "deductionsUploadType": {
+          "type": "cds.String",
+          "length": 100
         },
         "deductionsUpload": {
           "type": "cds.Association",
@@ -177,21 +215,186 @@
         }
       }
     },
-    "CatalogService.sendDataToUpload": {
-      "kind": "function",
-      "returns": {
-        "type": "cds.String"
+    "CatalogService.Approver_Comments": {
+      "kind": "entity",
+      "projection": {
+        "from": {
+          "ref": [
+            "app.deductions.Approver_Comments"
+          ]
+        }
+      },
+      "elements": {
+        "uploadID": {
+          "type": "cds.Integer"
+        },
+        "commentDate": {
+          "type": "cds.DateTime"
+        },
+        "userID": {
+          "type": "cds.String",
+          "length": 40
+        },
+        "comments": {
+          "type": "cds.String",
+          "length": 5000
+        }
+      }
+    },
+    "CatalogService.Yamaha": {
+      "kind": "entity",
+      "projection": {
+        "from": {
+          "ref": [
+            "app.deductions.Yamaha"
+          ]
+        }
+      },
+      "elements": {
+        "BTPID": {
+          "key": true,
+          "type": "cds.String",
+          "length": 2000
+        },
+        "BusinessID": {
+          "type": "cds.Integer"
+        }
+      }
+    },
+    "CatalogService.uploadPayload": {
+      "kind": "type",
+      "elements": {
+        "Personnel_Number": {
+          "type": "cds.Integer"
+        },
+        "Wage_Type": {
+          "type": "cds.Integer"
+        },
+        "Wagetype_Description": {
+          "type": "cds.String"
+        },
+        "Amount": {
+          "type": "cds.String"
+        },
+        "Currency": {
+          "type": "cds.String"
+        },
+        "WBS": {
+          "type": "cds.String"
+        },
+        "uploadedBy": {
+          "type": "cds.String"
+        }
+      }
+    },
+    "CatalogService.response": {
+      "kind": "type",
+      "elements": {
+        "data": {
+          "type": "cds.String"
+        }
+      }
+    },
+    "CatalogService.responseData": {
+      "kind": "type",
+      "elements": {
+        "data": {
+          "items": {
+            "type": "cds.String"
+          }
+        }
       }
     },
     "CatalogService.retriveUploadID": {
       "kind": "function",
+      "params": {
+        "uploadID": {
+          "type": "cds.String"
+        }
+      },
       "returns": {
-        "type": "cds.String"
+        "type": "CatalogService.response"
+      }
+    },
+    "CatalogService.updateDeduction": {
+      "kind": "action",
+      "params": {
+        "payload": {
+          "items": {
+            "type": "CatalogService.uploadPayload"
+          }
+        },
+        "uploadID": {
+          "type": "cds.String"
+        },
+        "comments": {
+          "type": "cds.String"
+        },
+        "uploadedBy": {
+          "type": "cds.String"
+        }
+      },
+      "returns": {
+        "type": "CatalogService.response"
+      }
+    },
+    "CatalogService.sendDataToUpload": {
+      "kind": "action",
+      "params": {
+        "uploadedBy": {
+          "type": "cds.String"
+        },
+        "comments": {
+          "type": "cds.String"
+        },
+        "deductionsUploadType": {
+          "type": "cds.String"
+        },
+        "payload": {
+          "items": {
+            "type": "CatalogService.uploadPayload"
+          }
+        }
+      },
+      "returns": {
+        "type": "CatalogService.response"
+      }
+    },
+    "CatalogService.postDeducations": {
+      "kind": "action",
+      "params": {
+        "uploadID": {
+          "type": "cds.Integer"
+        },
+        "status": {
+          "type": "cds.String"
+        },
+        "comments": {
+          "type": "cds.String"
+        },
+        "userId": {
+          "type": "cds.String"
+        }
+      },
+      "returns": {
+        "type": "CatalogService.response"
+      }
+    },
+    "CatalogService.Ytest": {
+      "kind": "action",
+      "returns": {
+        "type": "CatalogService.response"
+      }
+    },
+    "CatalogService.Selecttest": {
+      "kind": "function",
+      "returns": {
+        "type": "CatalogService.response"
       }
     }
   },
   "meta": {
-    "creator": "CDS Compiler v2.10.4",
+    "creator": "CDS Compiler v2.12.0",
     "flavor": "inferred"
   },
   "$version": "2.0"
