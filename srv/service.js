@@ -231,5 +231,29 @@ module.exports = cds.service.impl(async function () {
             return e;
         }
     });
+    this.on('getUserInfo', req => {
+        try {
+            let results = {};
+            results.user = req.user.id;
+            if (req.user.hasOwnProperty('locale')) {
+                results.locale = req.user.locale;
+            }
+            results.roles = {};
+            results.roles.identified = req.user.is('identified-user');
+            results.roles.authenticated = req.user.is('authenticated-user');
+            results.roles.Viewer = req.user.is('CIO_Viewer');
+            results.roles.Admin = req.user.is('CIO_Admin');
+            config.response.body = {
+                sMessage:"getting user info", results
+            }
+            let resultData = {
+                data: config.response
+            }
+            return resultData;
+        } catch (e) {
+            console.log(e)
+        }
+
+    })
 });
 

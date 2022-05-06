@@ -31,4 +31,5 @@ service CatalogService {
     action postDeducations(uploadID : Integer, status : String, comments : String, userId: String) returns response;
     action Ytest() returns response;
     function Selecttest() returns response;
+    function getUserInfo() returns response;
 }
