@@ -1,0 +1,14 @@
+{
+    "MY_BOOKSHOP2_SYN_BOOKS": {
+        "target": {
+            "object": "MY_BOOKSHOP_BOOKS",
+            "schema.configure": "logical-captest-grantor/schema"
+        }
+    },
+    "MY_BOOKSHOP2_SYN_AUTHORS": {
+        "target": {
+            "object": "MY_BOOKSHOP_AUTHORS",
+            "schema.configure": "logical-captest-grantor/schema"
+        }
+    }
+}

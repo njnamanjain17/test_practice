@@ -1,0 +1,14 @@
+{
+    "logical-captest-grantor": {
+        "object_owner": {
+            "container_roles": [
+                "captest_access_g#"
+            ]
+        },
+        "application_user": {
+            "container_roles": [
+                "captest_access"
+            ]
+        }
+    }
+}

@@ -1,0 +1,53 @@
+_schema-version: "3.1"
+ID: captest2
+description: A simple CAP project.
+version: 1.0.0
+modules:
+- name: captest2-srv
+  type: nodejs
+  path: gen/srv
+  requires:
+  - name: captest2-db
+  provides:
+  - name: srv-api
+    properties:
+      srv-url: ${default-url}
+  parameters:
+    buildpack: nodejs_buildpack
+  build-parameters:
+    builder: npm-ci
+- name: captest2-db-deployer
+  type: hdb
+  path: gen/db
+  requires:
+  - name: captest2-db
+    properties:
+      TARGET_CONTAINER: captest2-db
+  - name: captest-grantor
+    group: SERVICE_REPLACEMENTS
+    properties: 
+      key: logical-captest-grantor
+      service: ~{captest-grantor-service}
+  parameters:
+    buildpack: nodejs_buildpack
+resources:
+- name: captest2-db
+  type: com.sap.xs.hdi-container
+  # parameters:
+  #   service: #
+  properties:
+    hdi-service-name: ${service-name}
+- name: captest-grantor
+  type: org.cloudfoundry.existing-service
+  parameters:
+    service-name: captest-db
+  properties:
+    captest-grantor-service: ${service-name}
+parameters:
+  enable-parallel-deployments: true
+build-parameters:
+  before-all:
+  - builder: custom
+    commands:
+    - npm ci
+    - npx -p @sap/cds-dk cds build --production
