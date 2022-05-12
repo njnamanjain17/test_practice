@@ -1,0 +1,28 @@
+set -o errexit
+declare bin="$HOME/bin"
+
+
+setup() {
+    [ -d "/home/user/bin" ] || mkdir "/home/user/bin"
+    echo $'PATH=$PATH:'"/home/user/bin" >> "$HOME/.bashrc"
+}
+
+
+install() {
+    local name=$1
+    local url=$2
+    echo -n "Installing $name ..."
+    curl --silent -L "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl" > "/home/user/bin/kubectl"
+    chmod +x "/home/user/bin/kubectl"
+    echo
+}
+
+main() {
+
+    setup
+    install kubectl "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"
+
+    echo "Please now restart the terminal (Ctrl-D then Ctrl-\`) to have the new shell settings take effect."
+}
+
+main "$@"
