@@ -1,0 +1,21 @@
+{
+    "role": {
+        "name": "captest_access",
+        "object_privileges": [
+            {
+                "name": "MY_BOOKSHOP_BOOKS",
+                "type": "TABLE",
+                "privileges": [
+                    "SELECT"
+                ]
+            },
+            {
+                "name": "MY_BOOKSHOP_AUTHORS",
+                "type": "TABLE",
+                "privileges": [
+                    "SELECT"
+                ]
+            }
+        ]
+    }
+}

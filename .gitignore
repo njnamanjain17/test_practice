@@ -1,0 +1,9 @@
+
+# auto generated wildcard
+gen/db/.env
+# auto generated wildcard
+captest/gen/db/.env
+# auto generated wildcard
+captest/.env1
+# auto generated wildcard
+captest2/gen/db/.env
