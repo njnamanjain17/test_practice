@@ -191,20 +191,26 @@ module.exports = cds.service.impl(async function () {
     this.on('Ytest', async (req) => {
         try {
             let GetResult = await cds.tx(req).run(SELECT.from(Yamaha, ['BTPID', 'BusinessID'])
-            .where({ BusinessID: "125" }));
-            let InsertResult = await cds.tx(req).run(INSERT.into(Yamaha).entries(
-                {
-                   BTPID : "aaa228",
-                   BusinessID : 125
-                }
-            ));
-            console.log("result:"+InsertResult)
-            let resultData = {
-                data: "Data Inserted"
+                .where({ BusinessID: 126 }));
+            if (GetResult[0]) {
+                return req.error ("BusinessID already Present");
             }
-            return resultData;
+            else {
+                console.log("res::" + JSON.stringify(GetResult));
+                let InsertResult = await cds.tx(req).run(INSERT.into(Yamaha).entries(
+                    {
+                        BTPID: "aaa230",
+                        BusinessID: 126
+                    }
+                ));
+                console.log("result:" + InsertResult)
+                let resultData = {
+                    data: "Data Inserted"
+                }
+                return resultData;
+            }
         }
-        catch(e){
+        catch (e) {
             console.log(e);
             return e;
         }
@@ -213,17 +219,41 @@ module.exports = cds.service.impl(async function () {
     this.on('Selecttest', async (req) => {
         try {
             let GetResult = await cds.tx(req).run(SELECT.from(Yamaha, ['BTPID', 'BusinessID'])
-            .where({ BTPID: "aaa223" }));
-            console.log("result:"+GetResult)
+                .where({ BTPID: "aaa223" }));
+            console.log("result:" + GetResult)
             let resultData = {
                 data: "Data Selected"
             }
             return resultData;
         }
-        catch(e){
+        catch (e) {
             console.log(e);
             return e;
         }
     });
+    this.on('getUserInfo', req => {
+        try {
+            let results = {};
+            results.user = req.user.id;
+            if (req.user.hasOwnProperty('locale')) {
+                results.locale = req.user.locale;
+            }
+            results.roles = {};
+            results.roles.identified = req.user.is('identified-user');
+            results.roles.authenticated = req.user.is('authenticated-user');
+            results.roles.Viewer = req.user.is('CIO_Viewer');
+            results.roles.Admin = req.user.is('CIO_Admin');
+            config.response.body = {
+                sMessage:"getting user info", results
+            }
+            let resultData = {
+                data: config.response
+            }
+            return resultData;
+        } catch (e) {
+            console.log(e)
+        }
+
+    })
 });
 

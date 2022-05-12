@@ -391,6 +391,12 @@
       "returns": {
         "type": "CatalogService.response"
       }
+    },
+    "CatalogService.getUserInfo": {
+      "kind": "function",
+      "returns": {
+        "type": "CatalogService.response"
+      }
     }
   },
   "meta": {

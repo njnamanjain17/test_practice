@@ -1,0 +1,14 @@
+{
+    "role": {
+        "name": "captest_access",
+        "object_privileges": [
+            {
+                "name": "APP_DEDUCTIONS_YAMAHA",
+                "type": "TABLE",
+                "privileges": [
+                    "SELECT"
+                ]
+            }
+        ]
+    }
+}
