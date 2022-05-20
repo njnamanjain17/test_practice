@@ -1,0 +1,8 @@
+{
+    "MY_SYNTEST_YAMAHA": {
+        "target": {
+            "object": "APP_DEDUCTIONS_YAMAHA",
+            "schema.configure": "logical-captest-grantor/schema"
+        }
+    }
+}
