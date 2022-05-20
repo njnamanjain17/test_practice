@@ -2,5 +2,6 @@
 COLUMN TABLE app_deductions_Yamaha (
   BTPID NVARCHAR(2000) NOT NULL,
   BusinessID INTEGER,
+  ADMIN BOOLEAN,
   PRIMARY KEY(BTPID)
 )

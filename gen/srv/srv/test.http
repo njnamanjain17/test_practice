@@ -76,6 +76,10 @@ Content-Type: application/json;odata.metadata=minimal
 POST http://localhost:4004/catalog/Ytest
 Content-Type: application/json;odata.metadata=minimal
 
+{
+    "btpID": "namanjain@accenture.com",
+    "admin": true
+}
 ##################
 
 GET http://localhost:4004/catalog/Selecttest()
@@ -83,5 +87,10 @@ Content-Type: application/json;odata.metadata=minimal
 
 ###################
 
-POST http://localhost:4004/catalog/Deletedtest
+POST http://localhost:4004/catalog/DeleteUser
+Content-Type: application/json;odata.metadata=minimal
+
+###################
+GET http://localhost:4004/catalog/getUserInfo()
+Authorization:Basic naman.s.jain@accenture.com:
 Content-Type: application/json;odata.metadata=minimal

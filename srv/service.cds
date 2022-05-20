@@ -1,5 +1,5 @@
 using app.deductions from '../db/schema';
-//@requires: 'authenticated-user'
+@requires: 'authenticated-user'
 service CatalogService {
 
     entity Deductions_Upload  as projection on deductions.Deductions_Upload;
@@ -29,7 +29,8 @@ service CatalogService {
     action updateDeduction(payload : array of uploadPayload, uploadID : String, comments : String, uploadedBy : String) returns response; 
     action sendDataToUpload(uploadedBy : String, comments : String, deductionsUploadType : String, payload : array of uploadPayload) returns response; //post
     action postDeducations(uploadID : Integer, status : String, comments : String, userId: String) returns response;
-    action Ytest() returns response;
+    action Ytest(btpID : String, admin : Boolean) returns response;
+    action DeleteUser() returns response;
     function Selecttest() returns response;
     function getUserInfo() returns response;
 }

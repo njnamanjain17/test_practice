@@ -190,17 +190,18 @@ module.exports = cds.service.impl(async function () {
 
     this.on('Ytest', async (req) => {
         try {
-            let GetResult = await cds.tx(req).run(SELECT.from(Yamaha, ['BTPID', 'BusinessID'])
-                .where({ BusinessID: 126 }));
+            let GetResult = await cds.tx(req).run(SELECT.from(Yamaha, ['BTPID', 'BusinessID','ADMIN'])
+                .where({ BTPID: req.data.btpID }));
             if (GetResult[0]) {
-                return req.error ("BusinessID already Present");
+                return req.error ("BTPID already Present");
             }
             else {
                 console.log("res::" + JSON.stringify(GetResult));
                 let InsertResult = await cds.tx(req).run(INSERT.into(Yamaha).entries(
                     {
-                        BTPID: "aaa230",
-                        BusinessID: 126
+                        BTPID: req.data.btpID,
+                        BusinessID: 128,
+                        ADMIN: req.data.admin || false
                     }
                 ));
                 console.log("result:" + InsertResult)
@@ -219,10 +220,10 @@ module.exports = cds.service.impl(async function () {
     this.on('Selecttest', async (req) => {
         try {
             let GetResult = await cds.tx(req).run(SELECT.from(Yamaha, ['BTPID', 'BusinessID'])
-                .where({ BTPID: "aaa223" }));
+                .where({ BusinessID: 128 }));
             console.log("result:" + GetResult)
             let resultData = {
-                data: "Data Selected"
+                data: GetResult
             }
             return resultData;
         }
@@ -231,6 +232,22 @@ module.exports = cds.service.impl(async function () {
             return e;
         }
     });
+
+    this.on('DeleteUser', async (req) => {
+        try {
+            let deletedResult = await cds.tx(req).run(DELETE(Yamaha).where({ BTPID: "aaa231" }));
+            console.log("result:" + deletedResult)
+            let resultData = {
+                data: "BTP ID deleted"
+            }
+            return resultData;
+        }
+        catch (e) {
+            console.log(e);
+            return e;
+        }
+    });
+    
     this.on('getUserInfo', req => {
         try {
             let results = {};
@@ -238,11 +255,11 @@ module.exports = cds.service.impl(async function () {
             if (req.user.hasOwnProperty('locale')) {
                 results.locale = req.user.locale;
             }
-            results.roles = {};
-            results.roles.identified = req.user.is('identified-user');
-            results.roles.authenticated = req.user.is('authenticated-user');
-            results.roles.Viewer = req.user.is('CIO_Viewer');
-            results.roles.Admin = req.user.is('CIO_Admin');
+            //results.roles = {};
+            // results.roles.identified = req.user.is('identified-user');
+            // results.roles.authenticated = req.user.is('authenticated-user');
+            // results.roles.Viewer = req.user.is('CIO_Viewer');
+            // results.roles.Admin = req.user.is('CIO_Admin');
             config.response.body = {
                 sMessage:"getting user info", results
             }

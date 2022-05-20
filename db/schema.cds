@@ -30,6 +30,7 @@ entity Approver_Comments { //comments
 }
 
 entity Yamaha{
-    key BTPID : String(2000);
+     key BTPID : String(2000);
      BusinessID  : Integer; 
+     ADMIN : Boolean;
 }

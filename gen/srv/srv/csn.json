@@ -112,12 +112,16 @@
         },
         "BusinessID": {
           "type": "cds.Integer"
+        },
+        "ADMIN": {
+          "type": "cds.Boolean"
         }
       }
     },
     "CatalogService": {
       "@source": "srv/service.cds",
-      "kind": "service"
+      "kind": "service",
+      "@requires": "authenticated-user"
     },
     "CatalogService.Deductions_Upload": {
       "kind": "entity",
@@ -258,6 +262,9 @@
         },
         "BusinessID": {
           "type": "cds.Integer"
+        },
+        "ADMIN": {
+          "type": "cds.Boolean"
         }
       }
     },
@@ -381,6 +388,20 @@
       }
     },
     "CatalogService.Ytest": {
+      "kind": "action",
+      "params": {
+        "btpID": {
+          "type": "cds.String"
+        },
+        "admin": {
+          "type": "cds.Boolean"
+        }
+      },
+      "returns": {
+        "type": "CatalogService.response"
+      }
+    },
+    "CatalogService.DeleteUser": {
       "kind": "action",
       "returns": {
         "type": "CatalogService.response"

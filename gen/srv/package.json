@@ -62,6 +62,14 @@
       "auth": {
         "[production]": {
           "strategy": "JWT"
+        },
+        "[development]": {
+          "strategy": "mock",
+          "users": {
+            "naman.s.jain@accenture.com": {},
+            "julie": {},
+            "bob": {}
+          }
         }
       }
     },
