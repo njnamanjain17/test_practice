@@ -8,20 +8,21 @@
     "node": "16.15.0"
   },
   "dependencies": {
-    "@sap/cds": "^6",
-    "@sap/audit-logging": "^5",
-    "hdb": "^0.19",
     "@sap-cloud-sdk/http-client": "^2.5",
+    "@sap/audit-logging": "^5",
+    "@sap/cds": "^6",
+    "@sap/hana-client": "^2.13.22",
     "@sap/xsenv": "^3",
     "@sap/xssec": "^3",
-    "passport": "^0.4.1",
-
     "debug": "^4.3",
-    "express": "^4"
+    "express": "^4",
+    "hdb": "^0.19",
+    "passport": "^0.4.1"
   },
   "devDependencies": {
+    "@sap/hdi-deploy": "4.4.1",
+    "@sap/ux-specification": "^1.96.4",
     "sqlite3": "^5.0.2"
-    ,"@sap/ux-specification": "^1.96.4"
   },
   "sapux": [
     "app/resources/fiori"
@@ -111,34 +112,29 @@
             }
           }
         }
-      }
-      ,
+      },
       "db": {
+        "kind": "hana"
+      }
+    },
+    "NearEarthObjectWebService": {
+      "kind": "rest",
+      "impl": "srv/external/NearEarthObjectWebService.js",
+      "credentials": {
         "[production]": {
-          "kind": "hana-cloud"
+          "destination": "app-NASA-api",
+          "path": "neo/rest/v1"
         },
         "[development]": {
-          "kind": "hana"
-        },
-        "model": [
-          "db",
-          "srv"
-        ]
-      }
-        ,
-      "NearEarthObjectWebService": {
-        "kind": "rest",
-        "impl": "srv/external/NearEarthObjectWebService.js",
-        "credentials": {
-          "[production]": {
-            "destination": "app-NASA-api",
-            "path": "neo/rest/v1"
-          },
-          "[development]": {
-            "url": "https://api.nasa.gov/neo/rest/v1"
-          }
+          "url": "https://api.nasa.gov/neo/rest/v1"
         }
       }
+    },
+    "hana": {
+      "deploy-format": "hdbtable"
     }
+  },
+  "hana": {
+    "deploy-format": "hdbtable"
   }
 }
