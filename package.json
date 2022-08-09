@@ -1,140 +1,137 @@
 {
-  "name": "app",
-  "version": "0.0.1",
-  "repository": "<Add your repository here>",
-  "license": "UNLICENSED",
-  "description": "Business Application",
-  "engines": {
-    "node": "16.15.0"
-  },
-  "dependencies": {
-    "@sap-cloud-sdk/http-client": "^2.5",
-    "@sap/audit-logging": "^5",
-    "@sap/cds": "^6",
-    "@sap/hana-client": "^2.13.22",
-    "@sap/xsenv": "^3",
-    "@sap/xssec": "^3",
-    "debug": "^4.3",
-    "express": "^4",
-    "hdb": "^0.19",
-    "passport": "^0.4.1"
-  },
-  "devDependencies": {
-    "@sap/hdi-deploy": "4.4.1",
-    "@sap/ux-specification": "^1.96.4",
-    "sqlite3": "^5.0.2"
-  },
-  "sapux": [
-    "app/resources/fiori"
-  ],
-  "scripts": {
-    "start": "cds run"
-  },
-  "eslintConfig": {
-    "extends": "eslint:recommended",
-    "env": {
-      "es2020": true,
-      "node": true,
-      "jest": true,
-      "mocha": true
+    "name": "app",
+    "version": "0.0.1",
+    "repository": "<Add your repository here>",
+    "license": "UNLICENSED",
+    "description": "Business Application",
+    "engines": {
+        "node": "14.x"
     },
-    "globals": {
-      "SELECT": true,
-      "INSERT": true,
-      "UPDATE": true,
-      "DELETE": true,
-      "CREATE": true,
-      "DROP": true,
-      "CDL": true,
-      "CQL": true,
-      "CXL": true,
-      "cds": true
+    "dependencies": {
+        "@sap-cloud-sdk/http-client": "^2.5",
+        "@sap/audit-logging": "^5",
+        "@sap/cds": "^6",
+        "@sap/hana-client": "^2.13.22",
+        "@sap/xsenv": "^3",
+        "@sap/xssec": "^3",
+        "debug": "^4.3",
+        "express": "^4",
+        "hdb": "^0.19",
+        "passport": "^0.4.1"
     },
-    "rules": {
-      "no-console": "off",
-      "require-atomic-updates": "off"
-    }
-  },
-  "cds": {
-    "build": {
-      "target": "gen",
-      "tasks": [
-        {
-          "for": "hana",
-          "src": "db",
-          "options": {
-            "model": [
-              "db",
-              "app",
-              "srv"
-            ]
-          }
+    "devDependencies": {
+        "@sap/hdi-deploy": "4.4.1",
+        "@sap/ux-specification": "^1.96.4",
+        "sqlite3": "^5.0.2"
+    },
+    "sapux": [
+        "app/resources/fiori"
+    ],
+    "scripts": {
+        "start": "cds run"
+    },
+    "eslintConfig": {
+        "extends": "eslint:recommended",
+        "env": {
+            "es2020": true,
+            "node": true,
+            "jest": true,
+            "mocha": true
         },
-        {
-          "for": "node-cf",
-          "src": "srv",
-          "options": {
-            "model": [
-              "db",
-              "app",
-              "srv"
-            ]
-          }
+        "globals": {
+            "SELECT": true,
+            "INSERT": true,
+            "UPDATE": true,
+            "DELETE": true,
+            "CREATE": true,
+            "DROP": true,
+            "CDL": true,
+            "CQL": true,
+            "CXL": true,
+            "cds": true
+        },
+        "rules": {
+            "no-console": "off",
+            "require-atomic-updates": "off"
         }
-      ]
     },
-    "requires": {
-      "uaa": {
-        "kind": "xsuaa"
-      },
-      "auth": {
-        "[production]": {
-          "strategy": "JWT"
+    "cds": {
+        "build": {
+            "target": "gen",
+            "tasks": [
+                {
+                    "for": "hana",
+                    "src": "db",
+                    "options": {
+                        "model": [
+                            "db",
+                            "app",
+                            "srv"
+                        ]
+                    }
+                },
+                {
+                    "for": "node-cf",
+                    "src": "srv",
+                    "options": {
+                        "model": [
+                            "db",
+                            "app",
+                            "srv"
+                        ]
+                    }
+                }
+            ]
         },
-        "[development]": {
-          "strategy": "mock",
-          "users": {
-            "joe": {
-              "roles": [
-                "Admin",
-                "Viewer"
-              ]
+        "requires": {
+            "uaa": {
+                "kind": "xsuaa"
             },
-            "julie": {
-              "roles": [
-                "Viewer"
-              ]
+            "auth": {
+                "[production]": {
+                    "strategy": "JWT"
+                },
+                "[development]": {
+                    "strategy": "mock",
+                    "users": {
+                        "joe": {
+                            "roles": [
+                                "Admin",
+                                "Viewer"
+                            ]
+                        },
+                        "julie": {
+                            "roles": [
+                                "Viewer"
+                            ]
+                        },
+                        "bob": {
+                            "roles": [
+                                "Viewer"
+                            ]
+                        }
+                    }
+                }
             },
-            "bob": {
-              "roles": [
-                "Viewer"
-              ]
+            "db": {
+                "kind": "hana"
+            },
+            "NearEarthObjectWebService": {
+                "kind": "rest",
+                "impl": "srv/external/NearEarthObjectWebService.js",
+                "credentials": {
+                    "[production]": {
+                        "destination": "app-NASA-api",
+                        "path": "neo/rest/v1"
+                    },
+                    "[development]": {
+                        "url": "https://api.nasa.gov/neo/rest/v1"
+                    }
+                }
             }
-          }
         }
-      },
-      "db": {
-        "kind": "hana"
-      }
-    },
-    "NearEarthObjectWebService": {
-      "kind": "rest",
-      "impl": "srv/external/NearEarthObjectWebService.js",
-      "credentials": {
-        "[production]": {
-          "destination": "app-NASA-api",
-          "path": "neo/rest/v1"
-        },
-        "[development]": {
-          "url": "https://api.nasa.gov/neo/rest/v1"
-        }
-      }
     },
     "hana": {
-      "deploy-format": "hdbtable"
+        "deploy-format": "hdbtable"
     }
-  },
-  "hana": {
-    "deploy-format": "hdbtable"
-  }
 }
