@@ -5,7 +5,7 @@
   "license": "UNLICENSED",
   "description": "Business Application",
   "engines": {
-    "node": "14.x"
+    "node": "16.15.0"
   },
   "dependencies": {
     "@sap/cds": "^6",
@@ -118,7 +118,7 @@
           "kind": "hana-cloud"
         },
         "[development]": {
-          "kind": "sql"
+          "kind": "hana"
         },
         "model": [
           "db",
