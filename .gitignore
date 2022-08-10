@@ -1,4 +1,6 @@
 
 # auto generated wildcard
-.env9
-node_modules
+
+.env8
+node_modules/
+mta_archives/
